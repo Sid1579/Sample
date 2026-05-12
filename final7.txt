@@ -1,0 +1,151 @@
+CalculatorWS.java
+
+package org.me.calculator;
+
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+
+@WebService
+public class CalculatorWS {
+
+    @WebMethod
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+
+
+
+index.jsp
+
+
+<html>
+<body>
+
+<h2>Addition Service</h2>
+
+<form action="ClientServlet" method="post">
+
+    Number 1:
+    <input type="text" name="n1"><br><br>
+
+    Number 2:
+    <input type="text" name="n2"><br><br>
+
+    <input type="submit" value="Add">
+
+</form>
+
+</body>
+</html>
+
+
+ClientServlet.java
+
+package calculatorclientapp;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
+
+import org.me.calculator.CalculatorWS;
+import org.me.calculator.CalculatorWS_Service;
+
+@WebServlet("/ClientServlet")
+
+public class ClientServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws ServletException, IOException {
+
+        int a = Integer.parseInt(request.getParameter("n1"));
+        int b = Integer.parseInt(request.getParameter("n2"));
+
+        CalculatorWS_Service service =
+                new CalculatorWS_Service();
+
+        CalculatorWS port =
+                service.getCalculatorWSPort();
+
+        int result = port.add(a, b);
+
+        PrintWriter out = response.getWriter();
+
+        out.println("Result = " + result);
+    }
+}
+
+
+
+Add GlassFish Server in NetBeans
+
+Open NetBeans.
+
+Go to:
+
+Services → Servers → Right Click → Add Server
+
+Select:
+
+GlassFish Server
+
+Browse GlassFish folder.
+
+Example:
+
+C:\glassfish5\glassfish
+
+Click:
+
+Finish
+PART 1 — Create SOAP Web Service (Server)
+Step 1 — Create Web Application
+
+Go to:
+
+File → New Project
+
+Select:
+
+Java Web → Web Application
+
+Click:
+
+Next
+
+Project Name:
+
+CalculatorWS_server
+
+Click:
+
+Next
+
+Choose:
+
+GlassFish Server
+Java EE Version: Java EE 7 Web
+
+Click:
+
+Finish
+Step 2 — Create Web Service
+
+Right click project:
+
+New → Web Service
+
+Fill:
+
+Web Service Name:
+CalculatorWS
+
+Package Name:
+
+org.me.calculator
+
+Click:
+
+Finish
